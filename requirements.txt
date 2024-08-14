@@ -2,3 +2,4 @@ streamlit~=1.34.0
 nltk~=3.8.2
 tensorflow~=2.16.1
 scikit-learn~=1.5.1
+matplotlib~=3.9.2
