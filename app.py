@@ -42,6 +42,8 @@ if st.button('Predict'):
             st.header("Snow")
         elif class_x == 5:
             st.header("Fog")
+    except BrokenPipeError as e:
+        st.error(f"Broken pipe error: {e}")
     except Exception as e:
         st.error(f"An error occurred during prediction: {e}")
         raise
