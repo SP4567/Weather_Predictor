@@ -29,16 +29,19 @@ windsp = st.number_input('Enter the wind speed')
 if st.button('Predict'):
     weather_cl = [[preci, maxtemp, mintemp, windsp]]
     inp = Scaler.transform(weather_cl)
-    res = model.predict(inp)
-    class_x = np.argmax(res, axis=1)[0]
-
-    if class_x == 1:
-        st.header("Drizzle")
-    elif class_x == 2:
-        st.header("Rain")
-    elif class_x == 3:
-        st.header("Sun")
-    elif class_x == 4:
-        st.header("Snow")
-    elif class_x == 5:
-        st.header("Fog")
+    try:
+        res = model.predict(inp)
+        class_x = np.argmax(res, axis=1)[0]
+        if class_x == 1:
+            st.header("Drizzle")
+        elif class_x == 2:
+            st.header("Rain")
+        elif class_x == 3:
+            st.header("Sun")
+        elif class_x == 4:
+            st.header("Snow")
+        elif class_x == 5:
+            st.header("Fog")
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {e}")
+        raise
