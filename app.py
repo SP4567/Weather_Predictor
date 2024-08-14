@@ -22,8 +22,8 @@ def return_prediction(ANN, Scaler, sample_json):
     predict_x = ANN.predict(weather_class)
     classes_ind = np.argmax(predict_x, axis=1)
     return classes_ind
-Scaler = pickle.load(open("C:\\Users\\Suyash Pandey\\PycharmProjects\\Weather_Predictor\\scaler.pkl", "rb"))
-model = load_model('Weather_Predictor.h5')
+Scaler = pickle.load(open("scaler.pkl", "rb"))
+model = load_model("Weather_Predictor.h5")
 st.title('Weather_Sense')
 Preci = st.number_input('Enter the precipitation')
 maxtemp = st.number_input('Enter the maximum temperature')
