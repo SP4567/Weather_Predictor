@@ -25,12 +25,12 @@ def return_prediction(ANN, Scaler, sample_json):
 Scaler = pickle.load(open("scaler.pkl", "rb"))
 model = load_model("Weather_Predictor.h5")
 st.title('Weather_Sense')
-Preci = st.number_input('Enter the precipitation')
+preci = st.number_input('Enter the precipitation')
 maxtemp = st.number_input('Enter the maximum temperature')
 mintemp = st.number_input('Enter the minimum temperature')
 windsp = st.number_input('Enter the wind speed')
 if st.button('Predict'):
-    weather_cl = [[Preci, maxtemp, mintemp, windsp]]
+    weather_cl = [[preci, maxtemp, mintemp, windsp]]
     inp = Scaler.fit_transform(weather_cl)
     res = model.predict(inp)
     class_x = np.argmax(res, axis=1)
