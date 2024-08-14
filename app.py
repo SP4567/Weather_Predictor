@@ -1,8 +1,8 @@
 import pickle
 import streamlit as st
 from keras.models import load_model
-from sklearn.preprocessing import MinMaxScaler
 import numpy as np
+from sklearn.preprocessing import MinMaxScaler
 
 # Load scaler and model
 Scaler = pickle.load(open("scaler.pkl", "rb"))
@@ -21,29 +21,31 @@ def return_prediction(ANN, Scaler, sample_json):
 
 # Streamlit UI
 st.title('Weather Sense')
-preci = st.number_input('Enter the precipitation')
-maxtemp = st.number_input('Enter the maximum temperature')
-mintemp = st.number_input('Enter the minimum temperature')
-windsp = st.number_input('Enter the wind speed')
+
+preci = st.number_input('Enter the precipitation', format="%.2f")
+maxtemp = st.number_input('Enter the maximum temperature', format="%.2f")
+mintemp = st.number_input('Enter the minimum temperature', format="%.2f")
+windsp = st.number_input('Enter the wind speed', format="%.2f")
 
 if st.button('Predict'):
     weather_cl = [[preci, maxtemp, mintemp, windsp]]
     inp = Scaler.transform(weather_cl)
+    
     try:
         res = model.predict(inp)
         class_x = np.argmax(res, axis=1)[0]
-        if class_x == 1:
-            st.header("Drizzle")
-        elif class_x == 2:
-            st.header("Rain")
-        elif class_x == 3:
-            st.header("Sun")
-        elif class_x == 4:
-            st.header("Snow")
-        elif class_x == 5:
-            st.header("Fog")
-    except BrokenPipeError as e:
-        st.error(f"Broken pipe error: {e}")
+        
+        weather_classes = {
+            1: "Drizzle",
+            2: "Rain",
+            3: "Sun",
+            4: "Snow",
+            5: "Fog"
+        }
+        
+        # Display the result
+        st.header(weather_classes.get(class_x, "Unknown"))
+        
     except Exception as e:
         st.error(f"An error occurred during prediction: {e}")
-        raise
+        st.write("Exception details:", e)
