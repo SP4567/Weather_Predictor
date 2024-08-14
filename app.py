@@ -1,39 +1,37 @@
 import pickle
 import streamlit as st
-import keras
-import tensorflow
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import streamlit.web.cli as stcli
-from keras.src.saving import load_model
+from keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-import tensorflow as tf
-from tensorflow.keras.layers import Dense
-import keras.src.saving
+import numpy as np
+
+# Load scaler and model
+Scaler = pickle.load(open("scaler.pkl", "rb"))
+model = load_model("Weather_Predictor.h5")
+
 def return_prediction(ANN, Scaler, sample_json):
     preci = sample_json["precipitation"]
     max_temp = sample_json["temp_max"]
     min_temp = sample_json["temp_min"]
     wind_speed = sample_json["wind"]
     weather_class = [[preci, max_temp, min_temp, wind_speed]]
-    weather_class = Scaler.fit_transform(weather_class)
+    weather_class = Scaler.transform(weather_class)
     predict_x = ANN.predict(weather_class)
     classes_ind = np.argmax(predict_x, axis=1)
     return classes_ind
-Scaler = pickle.load(open("scaler.pkl", "rb"))
-model = load_model("Weather_Predictor.h5")
-st.title('Weather_Sense')
+
+# Streamlit UI
+st.title('Weather Sense')
 preci = st.number_input('Enter the precipitation')
 maxtemp = st.number_input('Enter the maximum temperature')
 mintemp = st.number_input('Enter the minimum temperature')
 windsp = st.number_input('Enter the wind speed')
+
 if st.button('Predict'):
     weather_cl = [[preci, maxtemp, mintemp, windsp]]
-    inp = Scaler.fit_transform(weather_cl)
+    inp = Scaler.transform(weather_cl)
     res = model.predict(inp)
-    class_x = np.argmax(res, axis=1)
+    class_x = np.argmax(res, axis=1)[0]
+
     if class_x == 1:
         st.header("Drizzle")
     elif class_x == 2:
